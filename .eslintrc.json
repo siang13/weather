@@ -1,0 +1,71 @@
+{
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "ignorePatterns": ["tailwind.config.js", "postcss.config.js"],
+  "extends": [
+    "airbnb",
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "plugin:tailwindcss/recommended",
+    "plugin:@next/next/recommended",
+    "prettier"
+  ],
+  "plugins": ["tailwindcss", "sort-destructure-keys"],
+  "rules": {
+    "import/order": [
+      "error",
+      {
+        "alphabetize": {
+          "order": "asc"
+        },
+        "pathGroups": [
+          {
+            "pattern": "assets/**",
+            "group": "builtin"
+          },
+          {
+            "pattern": "~/**",
+            "group": "internal"
+          }
+        ],
+        "groups": [
+          ["builtin", "external", "type"],
+          ["internal", "parent", "sibling", "index", "object"]
+        ]
+      }
+    ],
+    "import/prefer-default-export": "off",
+    "react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],
+    "import/extensions": "off",
+    "react/react-in-jsx-scope": "off",
+    "no-console": "error",
+    "no-param-reassign": ["error", { "props": false }],
+    "react/function-component-definition": [
+      "error",
+      {
+        "namedComponents": "arrow-function"
+      }
+    ],
+    "import/no-extraneous-dependencies": "off",
+    "react/jsx-sort-props": "error",
+    "react/require-default-props": "off",
+    "react/jsx-key": "error",
+    "sort-destructure-keys/sort-destructure-keys": [
+      "warn",
+      {
+        "caseSensitive": false
+      }
+    ],
+    "react/button-has-type": "off",
+    "react/jsx-props-no-spreading": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": "off",
+    "jsx-a11y/label-has-associated-control": [
+      2,
+      {
+        "assert": "either"
+      }
+    ]
+  }
+}
