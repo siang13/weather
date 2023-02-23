@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-1. Create env file with below sample variable
+1. Create .env file with below sample variable
 
 ```
 NEXT_PUBLIC_API_KEY=8ee094e0c946653f53e78466bbe3804c
