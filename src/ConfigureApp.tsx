@@ -1,3 +1,4 @@
+import { StyleProvider } from '@ant-design/cssinjs';
 import { IconProvider, DEFAULT_ICON_CONFIGS } from '@icon-park/react';
 import {
   QueryClient,
@@ -9,6 +10,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ConfigProvider } from 'antd';
 import { AppProps } from 'next/app';
 import React, { useState, PropsWithChildren } from 'react';
+
 import { ICON_DEFAULT_SIZE } from './core/constants/theme';
 
 type ConfigureAppProps = Pick<
@@ -39,7 +41,9 @@ const ConfigureApp = ({ children, pageProps }: ConfigureAppProps) => {
         <IconProvider
           value={{ ...DEFAULT_ICON_CONFIGS, size: ICON_DEFAULT_SIZE }}
         >
-          <ConfigProvider>{children}</ConfigProvider>
+          <ConfigProvider>
+            <StyleProvider hashPriority="high">{children}</StyleProvider>
+          </ConfigProvider>
         </IconProvider>
       </Hydrate>
     </QueryClientProvider>

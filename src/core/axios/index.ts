@@ -1,52 +1,43 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-import { REQUEST_TIMEOUT, API_URI } from '~/core/config';
+type QueryParams = Record<string, string | number | boolean | null | undefined>;
 
-export const fetchData =
-  <TData, TVariables>(
-    query: string,
-    variables?: TVariables,
-    options?: RequestInit['headers'],
-  ): (() => Promise<TData>) =>
-  async () => {
-    const config: AxiosRequestConfig = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(options as AxiosRequestConfig['headers']),
-      },
-      baseURL: API_URI,
-      data: {
-        query,
-        variables,
-      },
-      withCredentials: true,
-      timeout: REQUEST_TIMEOUT,
-    };
-    try {
-      const { data } = await axios(config);
+type AxiosWrapperArgs = {
+  url: string;
+  method?: AxiosRequestConfig['method'];
+  queryParams?: QueryParams;
+  data?: unknown;
+  headers?: AxiosRequestConfig['headers'];
+};
 
-      if (data.errors) {
-        const [{ extensions = {}, message = '' }] = data.errors;
-        const error = new Error(message);
-        error.code = extensions?.code;
-        error.response = extensions?.response;
-        const { statusCode } = extensions?.response || {};
-        error.response.status = statusCode;
-        error.response.statusText = message;
+export const axiosWrapper = async <T>({
+  data,
+  headers = {},
+  method = 'GET',
+  queryParams = {},
+  url,
+}: AxiosWrapperArgs): Promise<T> => {
+  const config: AxiosRequestConfig = {
+    method,
+    url,
+    params: {
+      ...queryParams,
+      appid: process.env.NEXT_PUBLIC_API_KEY,
+    },
+    data,
+    headers,
+  };
 
-        if (statusCode === 500) {
-          // toast 500
-        }
-
-        throw error;
-      }
-
-      return data.data;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        // toast Unknown error occurred
-      }
+  try {
+    const response: AxiosResponse<T> = await axios(config);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error.response?.data ?? error;
+    } else {
       throw error;
     }
-  };
+  }
+};
+
+export default axiosWrapper;
